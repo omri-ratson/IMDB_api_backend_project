@@ -80,9 +80,10 @@ DATABASES = {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': BASE_DIR / 'db.sqlite3',
         # Uncomment this part if you want the test to work on the real database.
-        # 'TEST': {
-        #     'NAME': BASE_DIR / 'db.sqlite3',
-        # },
+        'TEST': {
+            'NAME': BASE_DIR / 'db.sqlite3',
+            'MIRROR': 'default',
+        },
     }
 }
 

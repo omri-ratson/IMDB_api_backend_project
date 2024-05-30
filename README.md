@@ -67,7 +67,7 @@ The following API endpoints are available in this project:
 * `GET /watch/stream/review/{id}/`: Retrieve review of a specific movie.
 * `POST /watch/stream/{id}/review-create`: create a review for specific movie.
 
-### Authentication and Permissions
+## 9. Authentication and Permissions
 By default, the API endpoints are set to require authentication. You need to obtain an access token to access the protected endpoints. You can obtain an access token by sending a POST request to /api/token/, providing your username and password.
 
 For example:
@@ -76,4 +76,7 @@ curl -X POST -H "Content-Type: application/json" -d '{"username": "your-username
 ```
 The response will include an access token that you can use for subsequent requests by including it in the Authorization header.
 
+## 10. Swagger
+Upon start of the application, a SwaggerUI can be accessed at - http://localhost:8000/swagger.  
+This provides a user-friendly interface to interact with the API endpoints.
 <hr>

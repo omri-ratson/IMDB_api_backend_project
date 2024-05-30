@@ -1,7 +1,6 @@
 from django.http import HttpResponse
 from rest_framework import generics
 from rest_framework import status
-from rest_framework.decorators import APIView
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
@@ -86,14 +85,15 @@ class ReviewDetails(generics.RetrieveUpdateDestroyAPIView):
 #         return self.retrieve(request, *args, **kwargs)
 
 
-class StreamPlatformAV(APIView):
+class StreamPlatformAV(generics.ListCreateAPIView):
+    serializer_class = StreamPlatformSerializer
 
-    def get(self, request):
+    def get(self, request, **kwargs):
         platform = StreamPlatform.objects.all()
         serializers_sp = StreamPlatformSerializer(platform, many=True, context={'request': request})
         return Response(serializers_sp.data, status=status.HTTP_200_OK)
 
-    def post(self, request):
+    def post(self, request, **kwargs):
         data = request.data
         serializer = StreamPlatformSerializer(data=data)
         if serializer.is_valid():
@@ -103,10 +103,11 @@ class StreamPlatformAV(APIView):
             return Response(serializer.errors)
 
 
-class StreamPlatformDetail(APIView):
+class StreamPlatformDetail(generics.RetrieveUpdateAPIView):
+    queryset = StreamPlatform.objects.all()
+    serializer_class = StreamPlatformSerializer
 
     def get(self, request, pk):
-
         try:
             platform = StreamPlatform.objects.get(pk=pk)
         except StreamPlatform.DoesNotExist:
@@ -131,10 +132,10 @@ class StreamPlatformDetail(APIView):
         return HttpResponse(status=204)
 
 
-class WatchList(generics.CreateAPIView):
+class WatchListView(generics.ListCreateAPIView):
     serializer_class = WatchListSerializer
 
-    def get(self, request):
+    def get(self, request, **kwargs):
         movie = WatchList.objects.all()
         serializers_wl = WatchListSerializer(movie, many=True)
         return Response(serializers_wl.data, status=status.HTTP_200_OK)
@@ -149,15 +150,15 @@ class WatchList(generics.CreateAPIView):
             return Response(serializer.errors)
 
 
-class WatchDetail(APIView):
+class WatchDetail(generics.RetrieveUpdateAPIView):
+    queryset = WatchList.objects.all()
+    serializer_class = WatchListSerializer
 
     def get(self, request, pk):
-
         try:
             platform = WatchList.objects.get(pk=pk)
         except WatchList.DoesNotExist:
             return Response({'error': 'not found'}, status=404)
-
         serializers_wd = WatchListSerializer(platform)
         return Response(serializers_wd.data)
 

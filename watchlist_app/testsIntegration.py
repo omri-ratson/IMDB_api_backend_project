@@ -12,12 +12,7 @@ class WatchListAPITestCase(TestCase):
         self.watch_list_url = reverse('watch_list')
 
         # Create a sample Platform object
-        self.platform = StreamPlatform.objects.create(
-            id=1,
-            name="netflix",
-            description="yjfg",
-            website="https://www.netflix.com",
-        )
+        self.platform = StreamPlatform.objects.get(id=1)
 
         # Create a sample WatchList object
         self.watchlist = WatchList.objects.create(
@@ -36,3 +31,4 @@ class WatchListAPITestCase(TestCase):
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data, serializer.data)
+        self.assertEqual(serializer.data.__len__(), 4)
