@@ -1,11 +1,13 @@
+from django.core.exceptions import ValidationError
 from django.http import HttpResponse
 from rest_framework import generics
 from rest_framework import status
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
+from .models import Review, StreamPlatform, WatchList
 from .permissions import AdminOrReadOnly
-from .serializers import *
+from .serializers import ReviewSerializer, StreamPlatformSerializer, WatchListSerializer
 
 
 # Create your views here.
@@ -64,27 +66,6 @@ class ReviewDetails(generics.RetrieveUpdateDestroyAPIView):
     permission_classes = [AdminOrReadOnly]
 
 
-# class ReviewList(mixins.ListModelMixin,
-#                   mixins.CreateModelMixin,
-#                   generics.GenericAPIView):
-#     queryset = Review.objects.all()
-#     serializer_class = Review_serializer
-
-#     def get(self, request, *args, **kwargs):
-#         return self.list(request, *args, **kwargs)
-
-#     def post(self, request, *args, **kwargs):
-#         return self.create(request, *args, **kwargs)
-
-
-# class ReviewDetails(mixins.RetrieveModelMixin,generics.GenericAPIView):
-#     queryset = Review.objects.all()
-#     serializer_class = Review_serializer
-
-#     def get(self, request, *args, **kwargs):
-#         return self.retrieve(request, *args, **kwargs)
-
-
 class StreamPlatformAV(generics.ListCreateAPIView):
     serializer_class = StreamPlatformSerializer
 
@@ -126,13 +107,15 @@ class StreamPlatformDetail(generics.RetrieveUpdateAPIView):
             return Response(serializer.errors)
         return Response(serializer.data)
 
-    def delete(self, request, pk):
+    @staticmethod
+    def delete(request, pk):
         movie = StreamPlatform.objects.get(pk=pk)
         movie.delete()
         return HttpResponse(status=204)
 
 
 class WatchListView(generics.ListCreateAPIView):
+    queryset = WatchList.objects.all()
     serializer_class = WatchListSerializer
 
     def get(self, request, **kwargs):
@@ -172,64 +155,8 @@ class WatchDetail(generics.RetrieveUpdateAPIView):
             return Response(serializer.errors)
         return Response(serializer.data)
 
-    def delete(self, request, pk):
+    @staticmethod
+    def delete(request, pk):
         movie = WatchList.objects.get(pk=pk)
         movie.delete()
         return HttpResponse(status=status.HTTP_302_FOUND)
-
-# class ReviewsAV(APIView):
-
-
-#     def get(self,request):
-#         platform = Review.objects.all()
-#         serializers = Review_serializer(platform,many=True,context={'request':request})
-#         return Response(serializers.data,status=status.HTTP_200_OK)
-
-#     def post(self,request):
-#         data = request.data
-#         serializer = Review_serializer(data=data)
-#         if serializer.is_valid():
-#             serializer.save()
-#             return Response(serializer.data,status=status.HTTP_201_CREATED)
-#         else:
-#             return Response(serializer.errors)
-
-
-# @api_view(['GET','POST'])
-# def movie_list(request):
-#     if request.method == 'GET':
-#         movie = WatchList.objects.all()
-#         serializers = WatchList_serializer(movie,many=True)
-#         return Response(serializers.data,status=status.HTTP_200_OK)
-#     elif request.method == 'POST':
-#         data = request.data
-#         serializer = WatchList_serializer(data=data)
-#         if serializer.is_valid():
-#             serializer.save()
-#             return Response(serializer.data,status=status.HTTP_201_CREATED)
-#         else:
-#             return Response(serializer.errors)
-
-
-# @api_view(['GET','PUT','DELETE'])
-# def movie_details(request,pk):
-#     try:
-#         movie = WatchList.objects.get(pk=pk)
-#     except WatchList.DoesNotExist:
-#         return Response(status=404)
-
-
-#     if request.method == 'GET':
-#         serializers = WatchList_serializer(movie)
-#         return Response(serializers.data)
-#     if request.method == 'PUT':
-#         data = request.data
-#         serializer = WatchList_serializer(movie,data=data)
-#         if serializer.is_valid():
-#             serializer.save()
-#         else:
-#             return Response(serializer.errors)
-#         return Response(serializer.data)
-#     if request.method == 'DELETE':
-#         movie.delete()
-#         return HttpResponse(status=204)
