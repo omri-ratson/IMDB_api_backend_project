@@ -6,49 +6,31 @@ This repository contains a Django-based backend project that serves as a RESTful
 To run this project locally, follow these steps:
 
 ## 1. Clone the repository to your local machine using the following command:
-
 ```bash
-git clone https://github.com/your-username/imdb-django-backend.git
+git clone {this project}
 ```
 
-
-## 2. Change into the project directory:
-
+## 2. Create a virtual environment to isolate the project dependencies:
 ```bash
-cd imdb-django-backend
+python -m venv env
 ```
-
-## 3 Create a virtual environment to isolate the project dependencies:
-
-```bash
-python3 -m venv env
-```
-## 4. Activate the virtual environment:
-
+## 3. Activate the virtual environment:
 ```bash
 source env/bin/activate
 ```
-## 5. Install the project dependencies:
 
+## 4. Install the project dependencies:
 ```bash
 pip install -r requirements.txt
 ```
-## 6. Perform the initial database migration:
 
-
-```bash
-python manage.py migrate
-```
-
-## 7. Start the development server:
-
-
+## 5. Start the development server:
 ```bash
 python manage.py runserver
 ```
 The development server will be up and running at http://localhost:8000/. You can now access the API endpoints.
 
-## 8. API Endpoints
+## 6. API Endpoints
 The following API endpoints are available in this project:
 
 ### Movies
@@ -67,7 +49,7 @@ The following API endpoints are available in this project:
 * `GET /watch/stream/review/{id}/`: Retrieve review of a specific movie.
 * `POST /watch/stream/{id}/review-create`: create a review for specific movie.
 
-## 9. Authentication and Permissions
+## 7. Authentication and Permissions
 By default, the API endpoints are set to require authentication. You need to obtain an access token to access the protected endpoints. You can obtain an access token by sending a POST request to /api/token/, providing your username and password.
 
 For example:
@@ -76,7 +58,13 @@ curl -X POST -H "Content-Type: application/json" -d '{"username": "your-username
 ```
 The response will include an access token that you can use for subsequent requests by including it in the Authorization header.
 
-## 10. Swagger
+## 8. Swagger
 Upon start of the application, a SwaggerUI can be accessed at - http://localhost:8000/swagger.  
 This provides a user-friendly interface to interact with the API endpoints.
+
+## 9. Tests
+To run the integration tests for this project, use the following command:
+```bash
+python manage.py test watchlist_app.testsIntegration
+```
 <hr>
